@@ -1,28 +1,45 @@
+import { postData } from "../raw-data/post-data";
+import { useState } from "react";
+
+
+
 function Posts() {
+
+  const [love, islove] =useState(postData.map(() => 0))
+
+  function addlike(index){
+    islove(prev => prev.map((like, i) => i === index ? like + 1 : like))
+  }
+  function dislike(index){
+    islove(prev => prev.map((like, i) => i === index ? Math.max(like - 1, 0) : like))
+  }
+
+
+
   return (
     <div class="app-wrapper">
       <h1 class="app-title">Posts</h1>
       <div class="post-list">
-        <div class="post-item">
+
+        {postData.map((item, index) => {
+        return(
+        <div class="post-item" key={item.id}>
           <div class="post-header">
-            <h2>Post Title #1</h2>
+            <h2>{item.title}</h2>
             <div class="post-social-media-stats">
               <span class="stats-topic">Likes: </span>
-              <span class="post-likes">10</span>
+              <span class="post-likes">{love[index]}</span>
             </div>
           </div>
           <p class="post-content">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus
-            vel turpis vestibulum, aliquet ipsum vitae, auctor risus. Morbi
-            tincidunt, leo non molestie consectetur, elit libero faucibus
-            tellus, sed fringilla tortor libero sit amet odio. Maecenas sed ante
-            condimentum mauris euismod pellentesque eu eu justo...
+            {item.content}
           </p>
           <div class="post-actions">
-            <button class="like-button">Like</button>
-            <button class="dislike-button">Dislike</button>
+            <button class="like-button" onClick={()=> addlike(index)}>Like</button>
+            <button class="dislike-button" onClick={()=> dislike(index)}>Dislike</button>
           </div>
         </div>
+      )})}
       </div>
     </div>
   );
